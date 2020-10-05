@@ -10,27 +10,9 @@ var streets = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{
   tileSize: 512,
   maxZoom: 18,
   zoomOffset: -1,
-  id: "mapbox/satellite-v9",
+  id: "mapbox/light-v10",
   accessToken: "pk.eyJ1Ijoia2F0YXN0cjBwaGljIiwiYSI6ImNrZmVqbDd0NjAybXoydG83ejU2aGx3cHMifQ.MtO9FDp8gOFPc3KamOV4hg"
 }).addTo(myMap);
-//How to layer MapBox maps to create proper base?
-
-//Teacher walked through a legend set up in class, however.. it doesnt work.
-let legend = L.control({positon: "bottomright"});
-legend.onAdd = function() {
-    let div = L.DomUtil.create("div", "info legend");
-    let limits =["0-1","1-2","2-3","3-4","4-5","5+"];
-    let colors = ["green","blue","red","yellow","purple","pink"];
-    let labels = [];
-
-colors.forEach(function(color, index) {
-    labels.push(`<li><div style="background-color:'${color}'; display:'block'; height:lem; width:lem;">.</div><div>${limits[index]}</div></li>`)
-
-});
-
-div.innerHTML += "<ul>" + labels.join("") + "</ul>";
-return div;
-}
 
 let baseURL ="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson";
 
@@ -71,10 +53,40 @@ d3.json(baseURL, function(earthquakeinfo) {
         fillColor: color,
         radius: radius
     }).bindPopup("<h1> " + location +  "<h3> Magnitude : " + mag + "</h3>").addTo(myMap)
-
+    
+    function getColor(d) {
+        return d > 5 ? 'red' :
+               d > 4  ? 'yellow' :
+               d > 3  ? 'orange' :
+               d > 2  ? 'green' :
+               d > 1  ? 'blue' :
+                        'purple';
+      }
+    
+    var legend = L.control({position: 'bottomright'});
+  
+    legend.onAdd = function (myMap) {
+    
+        var div = L.DomUtil.create('div', 'info legend'),
+            mags = [0, 1, 2, 3, 4, 5],
+            labels = [];
+    
+            
+        for (var i = 0; i < mags.length; i++) {
+            div.innerHTML +=
+                '<i style="background:' + getColor(mags[i] + 1) + '"></i> ' +
+                mags[i] + (mags[i + 1] ? '&ndash;' + mags[i + 1] + '<br>' : '+');
+        }
+    
+        return div;
+    };
+    
+    
 
 
 
 }
+legend.addTo(myMap);
+
 })
     
