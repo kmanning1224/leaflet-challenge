@@ -28,22 +28,22 @@ d3.json(baseURL, function(earthquakeinfo) {
     let location = array[i].properties.place;
     let color = "";
     if (mag > 5.5) {
-        color = "red"
+        color = "#7a0177"
     }
     else if (mag > 5.0){
-        color = "yellow"
+        color = "#BD0026"
     }
     else if (mag > 4.0) {
-        color = "orange"
+        color = "#E31A1C"
     }
     else if (mag > 3.0){
-        color = "green"
+        color = "#FD8D3C"
     }
     else if (mag > 2.0){
-        color = "blue"
+        color = "#FEB24C"
     }
     else {
-        color = "purple"
+        color = "#FEB24C"
     }
     L.circle([coord[1], coord[0]], {
         color: "none",
@@ -55,12 +55,12 @@ d3.json(baseURL, function(earthquakeinfo) {
     }).bindPopup("<h1> " + location +  "<h3> Magnitude : " + mag + "</h3>").addTo(myMap)
     
     function getColor(d) {
-        return d > 5 ? 'red' :
-               d > 4  ? 'yellow' :
-               d > 3  ? 'orange' :
-               d > 2  ? 'green' :
-               d > 1  ? 'blue' :
-                        'purple';
+        return d > 5 ? '#7a0177' :
+               d > 4 ? '#BD0026' :
+               d > 3  ? '#E31A1C' :
+               d > 2  ? '#FD8D3C' :
+               d > 1  ? '#FEB24C' :
+                        '#FEB24C';
       }
     
     var legend = L.control({position: 'bottomright'});
@@ -68,14 +68,14 @@ d3.json(baseURL, function(earthquakeinfo) {
     legend.onAdd = function (myMap) {
     
         var div = L.DomUtil.create('div', 'info legend'),
-            mags = [0, 1, 2, 3, 4, 5],
-            labels = [];
+            grades = [0, 1, 2, 3, 4, 5];
+            
     
             
-        for (var i = 0; i < mags.length; i++) {
+        for (var i = 0; i < grades.length; i++) {
             div.innerHTML +=
-                '<i style="background:' + getColor(mags[i] + 1) + '"></i> ' +
-                mags[i] + (mags[i + 1] ? '&ndash;' + mags[i + 1] + '<br>' : '+');
+                '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
         }
     
         return div;
@@ -89,4 +89,4 @@ d3.json(baseURL, function(earthquakeinfo) {
 legend.addTo(myMap);
 
 })
-    
+ 
